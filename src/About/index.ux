@@ -1,0 +1,22 @@
+<template>
+  <div class="list-demo">
+    <listWrapper mydata="{{model_id}}" is-banner="{{isBanner}}"></listWrapper>
+  </div>
+</template>
+
+<style>
+.list-demo{
+  display: flex;
+  flex-direction: column;
+}
+</style>
+<import name="listWrapper" src="../List/index"></import>
+<script>
+
+  export default {
+    data:{
+      isBanner: false,
+      model_id: 2
+    }
+  }
+</script>

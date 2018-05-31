@@ -1,0 +1,131 @@
+<template>
+  <div class="content-page">
+    <tabs class="tabs-wrapper" @change="tabsChange" id="tab" index="{{tabSelectedIndex}}" >
+        <tab-content>
+          <div class="tab-content-section">
+            <text></text>
+            <listWrapper is-banner="true" mydata="{{tabList[0].model_id}}" if="{{tabList[0].show}}" onevt-type2="evtTypeHandler"></listWrapper>
+          </div>
+          <div class="tab-content-section">
+            <about if="{{tabList[1].show}}"></about>
+          </div>
+          <div class="tab-content-section">
+            <DemoDetail if="{{tabList[2].show}}"></DemoDetail>
+          </div>
+          <div class="tab-content-section">
+            <banner if="{{tabList[3].show}}"></banner>
+          </div>
+        </tab-content>
+        <tab-bar>
+            <div class="tab-item" for="{{(index,item) in tabList}}" @click="tabItemClick(index)">
+                <image class="tab-icon" src="{{(index == tabSelectedIndex) ? item.selected :item.normal}}"></image>
+                <text class="{{(index == tabSelectedIndex) ? 'selected' :'normal'}}">{{item.name}}</text>
+            </div>
+        </tab-bar>
+    </tabs>
+  </div>
+</template>
+
+<import name="listWrapper" src="../List/index"></import>
+<import name="about" src="../About/index"></import>
+<import name="DemoDetail" src="../DemoDetail/index"></import>
+<import name="banner" src="../Banner/index"></import>
+
+<script>
+import router from '@system.router'
+import webview from '@system.webview'
+import fetch from '@system.fetch'
+  export default{
+    data: {
+        tabList: [
+            {
+                name: '书架',
+                normal: '/Common/images/boy.png',
+                selected: '/Common/images/girl.png',
+                show: true,
+                model_id: 9
+            },
+            {
+                name: '精选',
+                normal: '/Common/images/boy.png',
+                selected: '/Common/images/girl.png',
+                show: false
+            },
+            {
+                name: '编辑',
+                normal: '/Common/images/boy.png',
+                selected: '/Common/images/girl.png',
+                show: false
+            },
+            {
+                name: '我的',
+                normal: '/Common/images/boy.png',
+                selected: '/Common/images/girl.png',
+                show: false
+            }
+        ],
+        tabSelectedIndex: 0
+    },
+    onInit() {
+      this.$on('evtType2', this.evtTypeHandler)
+    },
+    evtTypeHandler (evt) {
+      console.log(`父组件：事件响应: `, evt.type, evt.detail)
+      // 结束事件传递
+      // evt.stop()
+    },
+    evtType1Emit () {
+      console.log('click')
+      this.$broadcast('evtType1', { params: '额外参数' })
+    },
+    tabItemClick(index) {
+        this.changeCurrent(index)
+    },
+    tabsChange(evt) {
+        this.changeCurrent(evt.index);
+    },
+    changeCurrent(index) {
+      this.tabList[index].show = true
+      this.tabSelectedIndex = index
+    },
+    openView(){
+      router.push({
+        uri: 'Webview',
+        params: {
+          url: 'http://book.sina.cn/'
+        }
+      })
+    },
+  }
+</script>
+
+<style lang="less">
+.content-page{
+  display: flex;
+  flex-direction: column;
+  .tabs-wrapper{
+    display: flex;
+    flex-direction: column;
+    tab-bar {
+        height: 120px;
+        border-top-color: #dbdbdb;
+        border-top-width: 1px;
+      .tab-item {
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          .tab-icon {
+              width: 50px;
+              height: 50px;
+          }
+          .normal {
+              color: #999999;
+          }
+          .selected {
+              color: #09ba07;
+          }
+      }
+    }
+  }
+}
+</style>

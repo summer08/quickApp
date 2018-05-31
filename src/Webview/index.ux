@@ -1,0 +1,48 @@
+<template>
+    <web src="{{ url }}" id="web" ontitlereceive="titlereceive" onpagestart="pagestart"></web>
+</template>
+
+<script>
+import router from '@system.router'
+  export default {
+    data: {
+      title: '',
+      url: ''
+    },
+    onBackPress () {
+      this.$element('web').canBack({
+        callback: function (e) {
+          if (e) {
+            // 加载历史列表中的上一个 URL
+            this.$element('web').back()
+          } else {
+            router.back()
+          }
+        }.bind(this)
+      })
+      // 阻止默认行为，等待异步操作
+      return true
+    },
+    onReady(){
+      console.log('ready')
+    },
+    pagestart(url){
+      /*console.log(url)*/
+      console.log(url)
+      console.log(JSON.stringify(url)+'@@@@@@@@@@@')
+    },
+    pagefinish(url){
+      console.log(url)
+      console.log(JSON.stringify(url)+'************')
+    },
+    titlereceive(title){
+      /*console.log(title)
+      console.log(JSON.stringify(title))
+      console.log(title.title)*/
+      this.$page.setTitleBar({ text: title.title })
+    },
+    onInit () {
+      this.$page.setTitleBar({ text: this.title })
+    }
+  }
+</script>

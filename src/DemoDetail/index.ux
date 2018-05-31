@@ -1,0 +1,74 @@
+<template>
+  <!-- template里只能有一个根节点 -->
+  <div class="demo-page">
+    <div class="tutorial-page">
+      <!-- 包含完整schema的uri -->
+      <a href="tel:10086">调起电话</a>
+      <a href="sms:10086">调起短信</a>
+      <a href="mailto:example@xx.com">调起邮件</a>
+      <!-- 打开webview加载网页 -->
+      <a href="http://book.sina.cn/">打开网页</a>
+    </div>
+    <div class="richtext">
+      <text class="bg"></text>
+      <richtext type="html">{{content}}</richtext>
+    </div>
+  </div>
+</template>
+
+<style lang="less">
+  .demo-page,.tutorial-page {
+    background-color: #ffffff;
+    flex-direction: column;
+    justify-content: center;
+    a{
+      width: 100%;
+      margin-bottom: 20px;
+      font-size: 42px;
+    }
+    .bg{
+      background-image: url(../Common/images/SinaLogo.png);
+      width: 117px;
+      height: 88px;
+    }
+    .richtext{
+      flex-direction: column;
+      justify-content: center;
+    }
+    .richtext-content{
+      background-color: #cccccc;
+    }
+  }
+</style>
+
+<script>
+  import alipay from '@service.alipay';
+  export default {
+    data: {
+      content: `<div class="richtext-content" >
+        <h1>标题一</h1>
+        <h2>标题二</h2>
+        <h3>标题三</h3>
+        <h4>标题四</h4>
+        <h5>标题五</h5>
+        <h6>标题六</h6>
+        <em>我是em</em>
+      </div>`
+    },
+    onInit(){
+      /*alipay.pay({
+        orderInfo: 'order1',
+        callback: function (ret) {
+          console.log('handling callback')
+        }
+      })*/
+    },
+    /**
+     * 当用户点击菜单按钮时触发，调用app中定义的方法showMenu
+     * 注意：使用加载器测试`创建桌面快捷方式`功能时，请先在`系统设置`中打开`应用加载器`的`桌面快捷方式`权限
+     */
+    onMenuPress() {
+      this.$app.$def.showMenu()
+    }
+  }
+</script>

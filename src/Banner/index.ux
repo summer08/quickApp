@@ -1,0 +1,99 @@
+<template>
+  <!-- template里只能有一个根节点 -->
+  <div class="my-wrapper">
+    <list class="list-page">
+      <!-- banner图片 -->
+      <list-item type="banner"  for="{{bannerlist}}">
+          <swiper class="banner" autoplay="true" interval="4000">
+            <block for="{{bannerlist}}">
+              <image class="banner-image" src="{{$item.cover}}" onclick="openArticle($item.url, '', $item.title)"></image>
+            </block>
+          </swiper>
+      </list-item>
+    </list>
+    <div class="my-content">
+      <text>测试</text>
+    </div>
+  </div>
+</template>
+
+<style lang="less">
+  .my-wrapper {
+    display: flex;
+    flex-direction: column;
+    .list-page{
+      height: 300px;
+      background-color: #dddddd;
+      display: flex;
+      flex-direction: column;
+      .list-item{
+        height: 100%;
+      }
+      .banner, .banner-image {
+        width: 100%;
+        height: 300px;
+      }
+    }
+    .my-content{
+      margin-top: 20px;
+    }
+  }
+</style>
+
+<script>
+import fetch from '@system.fetch';
+  export default {
+    data: {
+      bannerlist: []
+    },
+    getBannerList: function(){
+      var self = this;
+      fetch && fetch.fetch({
+        url: 'http://book.sina.cn/dpool/newbook/client/ajax/get_page_data_v1.php?type=index&_=1526011442255',
+        data:{},
+        success: function(data){
+          var tempData = JSON.parse(data.data);
+          if(tempData.status.code == 0){
+            var module = tempData.data;
+            module.map(function(module,index){
+              if(module.model_type == '1'){
+                self.bannerlist = module.data;
+              }
+            })
+          }else{
+            console.log(tempData.error_msg)
+          }
+        },
+        fail: function(){
+          console.log('banner请求失败')
+        }
+      })
+    },
+    openArticle(link, projectLink, title) {
+      var url = projectLink === '' ? link : projectLink
+      if(url !== '') {
+        console.log(this.$app.$def.router)
+        this.$app.$def.router.push({
+          uri: 'Webview',
+          params: {
+            title: title,
+            url: url
+          }
+        })
+      }
+    },
+    onInit(){
+      //this.$page.setTitleBar({ text: '我的' })
+      //this.getDataList();
+      //this.getProductList(false);
+      this.getBannerList();
+    },
+    onBackPress() {
+        console.info(` ~~~ onBackPress`)
+    },
+    onMenuPress() {
+        console.info(` ~~~ onMenuPress`)
+        this.$app.showMenu();
+    },
+  }
+</script>

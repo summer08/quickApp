@@ -1,0 +1,378 @@
+<template>
+  <!-- template里只能有一个根节点 -->
+  <div class="container-page">
+    <!--list-->
+    <refresh class="refresh-div" onrefresh="refresh" refreshing="{{isRefreshing}}" offset="200">
+      <list class="list-page" id="list" onscrollbottom="scrollbottom" onscrolltop="scrolltop">
+        <!-- banner图片 -->
+        <!--<list-item type="banner">
+            <swiper class="banner" autoplay="true" interval="4000">
+              <block for="{{bannerlist}}">
+                <image class="banner-image" src="{{$item.cover}}" onclick="openArticle($item.url, '', $item.title)"></image>
+              </block>
+            </swiper>
+        </list-item>-->
+
+
+        <block for="{{productList}}">
+          <!-- 图片在左，文字在右的list-item，type属性自定义命名为productLeft -->
+          <list-item type="productLeft" class="list-item" >
+            <image class="img" src="{{$item.cover}}"></image>
+            <div class="listCon">
+              <text class="book-name">{{$item.short_name}}</text>
+              <text class="book-author">{{$item.cate_name}}|{{$item.author_name}}</text>
+              <text class="book-info">{{$item.intro}}</text>
+              <div class="book-tags">
+                <block for="{{(index, value) in $item.tags}}">
+                  <text class="{{value === '已完结' ? 'active' : 'book-tags-text'}}" if="{{value === '已完结'}}">{{value}}</text>
+                  <text class="{{value === '已完结' ? 'active' : 'book-tags-text'}}" if="{{value === '连载中'}}">{{value}}</text>
+                  <text>{{value}}</text>
+                </block>
+
+              </div>
+            </div>
+          </list-item>
+        </block>
+        <!-- 加载更多的list-item，type属性自定义命名为loadMore -->
+        <list-item type="loadMore" class="load-more">
+          <progress if="canLoadMore" class="bottom-progress" type="circular"></progress>
+          <text>{{loadingText}}</text>
+        </list-item>
+      </list>
+      <!-- 回顶按钮 -->
+  		<image
+  		if="showGoToTop"
+  		class="showgototop"
+  		onclick="gototop()"
+  		src="https://gw.alicdn.com/tps/TB1Wyj2KFXXXXXOXXXXXXXXXXXX-135-135.png"></image>
+    </refresh>
+
+  </div>
+</template>
+
+<style lang="less">
+  .load-more {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .showgototop {
+      position: fixed;
+      width: 80px;
+      height: 80px;
+      right: 30px;
+      bottom: 60px;
+      resize-mode: contain;
+      animation-name: showgototop;
+      animation-duration: 800ms;
+      animation-fill-mode: forwards;
+      animation-timing-function: ease-in;
+  }
+  @keyframes showgototop {
+      from {
+          transform: translateY(200px);
+      }
+      to {
+          transform: translateY(0px);
+      }
+  }
+  .container-page {
+    display: flex;
+    flex-direction: column;
+    .banner, .banner-image {
+      width: 100%;
+      height: 300px;
+    }
+    .header-wrap{
+      width: 100%;
+      font-size: 28px;
+      color: #1a1a1a;
+      height: 88px;
+      background-color: #f7f7f8;
+      border-bottom-width: 1px;
+      border-bottom-color: #d7d7d7;
+      padding: 0 15px;
+      .header-left{
+        flex: 1;
+        .left-wrapper{
+          width: 117px;
+          border-right-width:1px;
+          border-right-color: #dfdfdf;
+          .sianUrl{
+            .logo-pic{
+              position: fixed;
+              top: 0;
+              left: 15px;
+              width: 117px;
+              height: 88px;
+            }
+          }
+        }
+        .right-wrapper{
+          flex: 1;
+          .readUrl{
+            width: 150px;
+            margin-left: 16px;
+            .title{
+              font-size: 28px;
+              font-weight: bold;
+              margin-left: 8px;
+            }
+          }
+        }
+      }
+      .header-right{
+        width: 160px;
+        color: #000000;
+        .avatar{
+          margin-right: 30px;
+        }
+      }
+    }
+    .hot{
+      width: 750px;
+      .hot-wrapper{
+        padding: 0 20px 0;
+        height: 100px;
+        background-color: #ffffff;
+        width: 100%;
+        display: flex;
+        .hot-left{
+          height: 100px;
+          margin-right: 20px;
+          margin-top: 28px;
+          image{
+            width: 28px;
+            height: 44px;
+          }
+        }
+        .hot-right{
+          .hot-list{
+            margin-right: 10px;
+            a{
+              margin: 25px 0;
+              flex: 1;
+              padding: 6px 10px;
+              border-radius: 28px;
+              border-style: solid;
+              border-width: 1px;
+            }
+          }
+        }
+      }
+    }
+    .menu-test-warapper{
+      .menu-test-list{
+        .menu-test-item{
+
+        }
+      }
+
+    }
+    .menu-wrapper{
+      .menu{
+          display: flex;
+          flex-direction: column;
+        .menu-list{
+          flex-direction: row;
+        }
+        .menu-item{
+          width: 750px;
+          height: 144px;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
+          image{
+            width: 70px;
+            height: 70px;
+            margin-top: 20px;
+          }
+        }
+      }
+    }
+    .list-page{
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      .list-item{
+        height: 100%;
+        padding: 30px 20px;
+        .img{
+          width: 150px;
+          height: 222px;
+        }
+        .listCon{
+          flex: 1;
+          flex-direction: column;
+          margin: 20px 0 0 30px;
+          .book-name{
+            color: #000000;
+          }
+          .book-author{
+            color: #999999;
+            font-size: 24px;
+            margin-top: 10px;
+          }
+          .book-info{
+            color: #999999;
+            font-size: 24px;
+            margin-top: 10px;
+            line-height: 30px;
+            lines:2;
+            text-overflow: ellipsis;
+          }
+          .book-tags{
+            text{
+              font-size: 24px;
+              padding: 3px 5px;
+              border: 1px solid #f5f5f5;
+              background-color: #f5f8fa;
+              border-radius: 12px;
+              text-decoration: none;
+              transform: scale(.8);
+              color: #888888;
+            }
+            .book-tags-text{
+              background-color: #e6f7ff;
+              color: #5ab4dc;
+            }
+            .active{
+              background-color: #ffecea;
+              color: #f06e5f;
+            }
+          }
+
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+import fetch from '@system.fetch';
+  export default {
+    data: {
+      bannerlist: [],
+      productList: [],
+      currentPage: 0,
+      pageSize: 10,
+      showGoToTop: false,
+      canLoadMore: true,
+      isRefreshing: false,
+      loadingText: "正在加载…",
+      isRefreshing: false
+    },
+    getBannerList: function(){
+      var self = this;
+      fetch && fetch.fetch({
+        url: '  http://book.sina.cn/dpool/newbook/client/ajax/get_page_data_v1.php?type=index&_=1526011442255',
+        data:{},
+        success: function(data){
+          var tempData = JSON.parse(data.data);
+          if(tempData.status.code == 0){
+            var module = tempData.data;
+            module.map(function(module,index){
+              if(module.model_type == '1'){
+                self.bannerlist = module.data;
+              }
+            })
+          }else{
+            console.log(tempData.error_msg)
+          }
+        },
+        fail: function(){
+          console.log('banner请求失败')
+        }
+      })
+    },
+    openArticle(link, projectLink, title) {
+      var url = projectLink === '' ? link : projectLink
+      if(url !== '') {
+        console.log(this.$app.$def.router)
+        this.$app.$def.router.push({
+          uri: 'Webview',
+          params: {
+            title: title,
+            url: url
+          }
+        })
+      }
+    },
+    getProductList: function(isLoadMore){
+      var self = this;
+      // 判断页数
+      fetch && fetch.fetch({
+          url: "http://book.sina.cn/dpool/newbook/bookv1/ajax/get_page_data_more_v1.php",
+          data: {model_id: 9,page: self.currentPage+1},
+          success: function(data) {
+            var tempData = JSON.parse(data.data);
+            if(tempData.status.error_code == 0){
+              var maxPage = Math.ceil(tempData.count/self.pageSize);
+              if (self.currentPage >= maxPage) {
+                  self.loadingText = "没有更多数据了 ~"
+                  self.canLoadMore = false;
+              }
+              if (self.currentPage > 0) {
+                  self.productList = self.productList.concat(tempData.data);
+              } else {
+                  self.productList = tempData.data;
+              }
+              self.isRefreshing = false;
+              self.currentPage = self.currentPage + 1;
+            }else{
+              console.log(tempData.error_msg)
+            }
+
+          },
+          fail: function(data, code) {
+              console.log("fetch fail, code=" + code);
+              self.loadingText = "很抱歉，加载失败"
+              self.canLoadMore = false;
+              self.isRefreshing = false
+          }
+      })
+    },
+    refresh: function(e) {
+        this.isRefreshing = e.refreshing;
+        this.currentPage = 1;
+        this.showGoToTop = false
+        this.getProductList(false);
+    },
+    scrollbottom: function(e) {
+        console.log("scrollbottom");
+        if (this.canLoadMore) {
+            this.getProductList(true)
+        }
+        if (!this.showGoToTop) {
+            this.showGoToTop = true
+        }
+    },
+    scrolltop: function(e) {
+        console.log("scrolltop");
+        if (this.showGoToTop) {
+            this.showGoToTop = false
+        }
+    },
+    gototop: function(e) {
+        this.showGoToTop = false
+        this.$element('list').scrollTo({
+            index: 0,
+            smooth: true
+        })
+    },
+    onInit(){
+      //this.$page.setTitleBar({ text: '首页' })
+      //this.getDataList();
+      this.getProductList(false);
+      //this.getBannerList();
+    },
+    onBackPress() {
+        console.info(` ~~~ onBackPress`)
+    },
+    onMenuPress() {
+        console.info(` ~~~ onMenuPress`)
+        this.$app.showMenu();
+    },
+  }
+</script>

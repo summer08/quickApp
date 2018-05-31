@@ -1,0 +1,88 @@
+<template>
+  <div class="header-wrap">
+    <div class="header-left">
+      <div class="left-wrapper">
+        <a class="sianUrl" href="http://sina.cn?pos=10001">
+          <image class="logo-pic" src="../Common/images/SinaLogo.png"></image>
+
+      		<image class="showgototop" src="https://gw.alicdn.com/tps/TB1Wyj2KFXXXXXOXXXXXXXXXXXX-135-135.png"></image>
+    		</a>
+      </div>
+  		<div class="right-wrapper">
+        <a class="readUrl" href="/?pos=10002">
+          <span class="title">新浪小说</span>
+    		</a>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="avatar" id="avatar"><text>登录</text></div>
+      <a class="bookshelf-icon" id="goBookshelf" href="/dpool/newbook/bookv1/user/bookshelf.php?pos=400008">书架</a>
+    </div>
+  </div>
+
+</template>
+
+<script>
+  export default{}
+</script>
+
+<style lang="less">
+  .header-wrap{
+    width: 100%;
+    font-size: 28px;
+    color: #1a1a1a;
+    height: 88px;
+    background-color: #f7f7f8;
+    border-bottom-width: 1px;
+    border-bottom-color: #d7d7d7;
+    padding: 0 15px;
+    .header-left{
+      flex: 1;
+      .left-wrapper{
+        width: 117px;
+        border-right-width:1px;
+        border-right-color: #dfdfdf;
+        .sianUrl{
+          /*.showgototop {
+              position: fixed;
+              width: 80px;
+              height: 80px;
+              right: 30px;
+              bottom: 60px;
+              resize-mode: contain;
+              animation-name: showgototop;
+              animation-duration: 800ms;
+              animation-fill-mode: forwards;
+              animation-timing-function: ease-in;
+          }*/
+          .logo-pic{
+            position: fixed;
+            top: 0;
+            left: 15px;
+            width: 117px;
+            height: 88px;
+          }
+        }
+      }
+      .right-wrapper{
+        flex: 1;
+        .readUrl{
+          width: 150px;
+          margin-left: 16px;
+          .title{
+            font-size: 28px;
+            font-weight: bold;
+            margin-left: 8px;
+          }
+        }
+      }
+    }
+    .header-right{
+      width: 160px;
+      color: #000000;
+      .avatar{
+        margin-right: 30px;
+      }
+    }
+  }
+</style>

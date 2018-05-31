@@ -1,0 +1,67 @@
+{
+  "package": "com.application.demo",
+  "name": "myfirst",
+  "versionName": "1.0.0",
+  "versionCode": "1",
+  "minPlatformVersion": "101",
+  "icon": "/Common/logo.png",
+  "features": [
+    { "name": "system.prompt" },
+    { "name": "system.router" },
+    { "name": "system.fetch" },
+    { "name": "system.shortcut" },
+    { "name": "system.webview" },
+    { "name": "system.storage" },
+    { "name": "system.clipboard" },
+    { "name": "system.share" },
+    { "name": "service.alipay"}
+  ],
+  "permissions": [
+    { "origin": "*" }
+  ],
+  "config": {
+    "logLevel": "debug"
+  },
+  "router": {
+    "entry": "Home",
+    "pages": {
+      "Home": {
+        "component": "index"
+      },
+      "Index": {
+        "component": "index"
+      },
+      "DemoDetail": {
+        "component": "index"
+      },
+      "About": {
+        "component": "index"
+      },
+      "Banner": {
+        "component": "index"
+      },
+      "List": {
+        "component": "index"
+      },
+      "Webview": {
+        "component": "index"
+      }
+    }
+  },
+  "display": {
+      "titleBarBackgroundColor": "#000000",
+      "titleBarTextColor": "#ffffff",
+      "backgroundColor": "#f8f8f8",
+      "titleBarText": "新浪小说",
+      "pages": {
+          "index": {
+              "titleBarText": "新浪小说",
+              "menu": false
+          },
+          "About": {
+              "titleBarText": "关于",
+              "menu": false
+          }
+      }
+  }
+}
